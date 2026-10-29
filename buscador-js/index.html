@@ -1,21 +1,101 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
+        <!-- Configuración del idioma, caracteres y diseño adaptable -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <title>Estantería Común</title>
+
+        <!-- CSS generado al compilar Sass con Bootstrap -->
         <link rel="stylesheet" href="css/estilos.css">
     </head>
 
     <body>
+        <!-- Encabezado y navegación principal -->
+        <header>
+            <nav class="navbar bg-primary" data-bs-theme="dark" aria-label="Principal">
+                <div class="container">
+                    <a class="navbar-brand" href="index.html">
+                        Estantería Común
+                    </a>
+
+                    <a class="nav-link text-white" href="#buscador">
+                        Buscar libros
+                    </a>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Contenido principal de la página -->
         <main class="container py-5">
-            <h1 class="text-primary">Estantería Común</h1>
 
-            <p>Un espacio para descubrir y compartir lecturas.</p>
+            <!-- Presentación del club -->
+            <section class="mb-5" aria-labelledby="titulo-principal">
+                <h1 id="titulo-principal" class="text-primary">
+                    Tu próxima lectura empieza aquí
+                </h1>
 
-            <button type="button" class="btn btn-primary">
-                Botón de prueba
-            </button>
+                <p class="lead">
+                    Descubrí libros y organizá las próximas lecturas del club.
+                </p>
+            </section>
+
+            <!-- Formulario de búsqueda por título o autor -->
+            <section id="buscador" aria-labelledby="titulo-buscador">
+                <h2 id="titulo-buscador" class="h3 mb-3">
+                    Buscar libros
+                </h2>
+
+                <form id="formulario-busqueda" class="row g-3 align-items-end">
+
+                    <!-- En móvil ocupa toda la fila; desde md ocupa 9 columnas -->
+                    <div class="col-12 col-md-9">
+                        <label for="texto-busqueda" class="form-label">
+                            Título o autor
+                        </label>
+
+                        <input
+                            type="search"
+                            id="texto-busqueda"
+                            name="busqueda"
+                            class="form-control"
+                            placeholder="Ejemplo: El principito"
+                            required
+                        >
+                    </div>
+
+                    <!-- En móvil ocupa toda la fila; desde md ocupa 3 columnas -->
+                    <div class="col-12 col-md-3">
+                        <button type="submit" class="btn btn-primary w-100">
+                            Buscar
+                        </button>
+                    </div>
+                </form>
+
+                <!-- JavaScript actualizará este mensaje durante la búsqueda -->
+                <p id="mensaje-busqueda" class="mt-3" role="status">
+                    Escribí un título o autor para comenzar.
+                </p>
+            </section>
+
+            <!-- Espacio donde JavaScript agregará las tarjetas de los libros -->
+            <section class="mt-5" aria-labelledby="titulo-resultados">
+                <h2 id="titulo-resultados" class="h3 mb-3">
+                    Resultados
+                </h2>
+
+                <div id="resultados" class="row g-4"></div>
+            </section>
         </main>
+
+        <!-- Pie de página -->
+        <footer class="border-top py-3">
+            <div class="container">
+                <p class="mb-0 text-body-secondary">
+                    Estantería Común · Club de lectura
+                </p>
+            </div>
+        </footer>
     </body>
 </html>
