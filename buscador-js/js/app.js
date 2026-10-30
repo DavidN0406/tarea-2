@@ -1,6 +1,8 @@
-// Funciones para consultar la API y actualizar los mensajes
+// Función para consultar los libros en Open Library
 import { buscarLibros } from "./api.js";
-import { mostrarMensaje } from "./renderizado.js";
+
+// Funciones para actualizar los mensajes y las tarjetas
+import { mostrarMensaje, mostrarLibros } from "./renderizado.js";
 
 // Elementos del formulario de búsqueda
 const formularioBusqueda = document.getElementById("formulario-busqueda");
@@ -27,6 +29,9 @@ async function manejarBusqueda(evento) {
         return;
     }
 
+    // Limpia los resultados anteriores antes de iniciar otra búsqueda
+    mostrarLibros([]);
+
     // Informa que comenzó la búsqueda y desactiva el botón
     mostrarMensaje("Buscando libros...");
     botonBusqueda.disabled = true;
@@ -41,11 +46,14 @@ async function manejarBusqueda(evento) {
             return;
         }
 
-        // Confirma cuántos libros llegaron en esta petición
-        mostrarMensaje(`Se recibieron ${libros.length} libros.`);
+        // Construye las tarjetas con los libros recibidos
+        mostrarLibros(libros);
+
+        // Confirma cuántos libros se muestran en esta búsqueda
+        mostrarMensaje(`Se muestran ${libros.length} libros.`);
 
     } catch (error) {
-        // Muestra un mensaje si falla la petición o la lectura de la respuesta
+        // Muestra un mensaje si falla la petición o el procesamiento de los datos
         mostrarMensaje(
             "No se pudo completar la búsqueda. Intentá nuevamente en unos momentos."
         );
