@@ -87,6 +87,39 @@
 
                 <div id="resultados" class="row g-4"></div>
             </section>
+
+            <!-- Lista personal de lecturas guardada durante la sesión -->
+            <section class="mt-5" aria-labelledby="titulo-lecturas">
+                <h2 id="titulo-lecturas" class="h3 mb-3">
+                    Mi lista de lecturas
+                </h2>
+
+                <!-- Informa si un libro se agregó o ya estaba en la lista -->
+                <p id="mensaje-lecturas" role="status" hidden></p>
+
+                <!-- Se oculta cuando se agrega la primera lectura -->
+                <p id="lecturas-vacias" class="text-body-secondary">
+                    Todavía no agregaste libros a tu lista.
+                </p>
+
+                <!-- Permite desplazamiento horizontal en pantallas pequeñas -->
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <caption>Libros seleccionados y su estado de lectura.</caption>
+
+                        <thead>
+                            <tr>
+                                <th scope="col">Libro</th>
+                                <th scope="col">Autores</th>
+                                <th scope="col">Estado</th>
+                            </tr>
+                        </thead>
+
+                        <!-- JavaScript agregará una fila por cada lectura -->
+                        <tbody id="lista-lecturas"></tbody>
+                    </table>
+                </div>
+            </section>
         </main>
 
         <!-- Pie de página -->

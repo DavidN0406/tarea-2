@@ -11,19 +11,19 @@ export function mostrarMensaje(texto) {
 }
 
 // Reemplaza los resultados anteriores por las tarjetas de la nueva búsqueda
-export function mostrarLibros(libros) {
+export function mostrarLibros(libros, alAgregar) {
     // Elimina los elementos de la búsqueda anterior
     contenedorResultados.replaceChildren();
 
     // Crea una tarjeta por cada libro y la agrega a la página
     libros.forEach(function (libro) {
-        const tarjeta = crearTarjetaLibro(libro);
+        const tarjeta = crearTarjetaLibro(libro, alAgregar);
         contenedorResultados.append(tarjeta);
     });
 }
 
 // Construye los elementos HTML de una tarjeta y devuelve su columna
-function crearTarjetaLibro(libro) {
+function crearTarjetaLibro(libro, alAgregar) {
     // Organiza una tarjeta por fila en móvil, dos en md y tres en lg
     const columna = document.createElement("div");
     columna.className = "col-12 col-md-6 col-lg-4";
@@ -88,8 +88,24 @@ function crearTarjetaLibro(libro) {
         mostrarDetalleLibro(libro);
     });
 
-    // Coloca los datos y el botón dentro de la tarjeta
-    cuerpo.append(titulo, autores, anio, botonDetalle);
+    // Botón para agregar este libro a la lista de lecturas
+    const botonAgregar = document.createElement("button");
+    botonAgregar.type = "button";
+    botonAgregar.className = "btn btn-primary";
+    botonAgregar.textContent = "Agregar a lecturas";
+
+    // Avisa a app.js cuál libro eligió el usuario
+    botonAgregar.addEventListener("click", function () {
+        alAgregar(libro);
+    });
+
+    // Agrupa los botones y permite que bajen de línea cuando falta espacio
+    const acciones = document.createElement("div");
+    acciones.className = "d-flex flex-wrap gap-2";
+    acciones.append(botonDetalle, botonAgregar);
+
+    // Coloca los datos y las acciones dentro de la tarjeta
+    cuerpo.append(titulo, autores, anio, acciones);
     tarjeta.append(portada, cuerpo);
     columna.append(tarjeta);
 
@@ -113,4 +129,43 @@ function mostrarDetalleLibro(libro) {
     autores.textContent = nombresAutores || "No disponibles";
     anio.textContent = libro.first_publish_year ?? "No disponible";
     ediciones.textContent = libro.edition_count ?? "No disponible";
+}
+
+// Informa el resultado de una acción sobre la lista de lecturas
+export function mostrarMensajeLecturas(texto, tipo = "success") {
+    const mensaje = document.getElementById("mensaje-lecturas");
+
+    // Usa una alerta de Bootstrap y muestra el texto recibido
+    mensaje.className = `alert alert-${tipo}`;
+    mensaje.textContent = texto;
+    mensaje.hidden = false;
+}
+
+// Agrega una fila sin reconstruir las lecturas que ya estaban en pantalla
+export function agregarFilaLectura(lectura) {
+    const lista = document.getElementById("lista-lecturas");
+    const mensajeVacio = document.getElementById("lecturas-vacias");
+
+    // Identifica la fila con el mismo identificador del libro
+    const fila = document.createElement("tr");
+    fila.dataset.id = lectura.id;
+
+    // Nombre del libro
+    const titulo = document.createElement("td");
+    titulo.textContent = lectura.titulo;
+
+    // Nombres de los autores
+    const autores = document.createElement("td");
+    autores.textContent = lectura.autores;
+
+    // Estado actual de la lectura
+    const estado = document.createElement("td");
+    estado.textContent = lectura.estado;
+
+    // Inserta únicamente la nueva fila
+    fila.append(titulo, autores, estado);
+    lista.append(fila);
+
+    // La lista ya tiene contenido, por lo que se oculta el mensaje inicial
+    mensajeVacio.hidden = true;
 }

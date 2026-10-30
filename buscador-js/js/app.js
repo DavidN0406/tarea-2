@@ -1,25 +1,49 @@
-// Función para consultar los libros en Open Library
+// Consulta de libros en Open Library
 import { buscarLibros } from "./api.js";
 
-// Funciones para actualizar los mensajes y las tarjetas
-import { mostrarMensaje, mostrarLibros } from "./renderizado.js";
+// Administración de la lista de lecturas en memoria
+import { agregarLectura } from "./lecturas.js";
+
+// Funciones que actualizan la pantalla
+import {
+    mostrarMensaje,
+    mostrarLibros,
+    mostrarMensajeLecturas,
+    agregarFilaLectura
+} from "./renderizado.js";
 
 // Elementos del formulario de búsqueda
 const formularioBusqueda = document.getElementById("formulario-busqueda");
 const textoBusqueda = document.getElementById("texto-busqueda");
 const botonBusqueda = formularioBusqueda.querySelector('button[type="submit"]');
 
-// Procesa el envío del formulario y espera los resultados de la API
+// Coordina el registro del libro y su aparición en la tabla
+function manejarAgregarLectura(libro) {
+    // Intenta guardar el libro en el arreglo de lecturas
+    const lectura = agregarLectura(libro);
+
+    // Si devuelve null, el libro ya estaba registrado
+    if (lectura === null) {
+        mostrarMensajeLecturas("Ese libro ya está en tu lista.", "warning");
+        return;
+    }
+
+    // Agrega únicamente la fila nueva y confirma la acción
+    agregarFilaLectura(lectura);
+    mostrarMensajeLecturas(`Se agregó "${lectura.titulo}" a tu lista.`);
+}
+
+// Procesa el formulario y espera los resultados de la API
 async function manejarBusqueda(evento) {
     // Evita que el formulario recargue la página
     evento.preventDefault();
 
-    // Evita iniciar otra petición mientras hay una búsqueda en curso
+    // Impide iniciar otra petición mientras hay una búsqueda en curso
     if (botonBusqueda.disabled) {
         return;
     }
 
-    // Lee el texto y elimina espacios al inicio y al final
+    // Lee el campo y elimina espacios al inicio y al final
     const texto = textoBusqueda.value.trim();
 
     // Rechaza una entrada formada solamente por espacios
@@ -29,7 +53,7 @@ async function manejarBusqueda(evento) {
         return;
     }
 
-    // Limpia los resultados anteriores antes de iniciar otra búsqueda
+    // Limpia las tarjetas anteriores; la lista de lecturas se conserva
     mostrarLibros([]);
 
     // Informa que comenzó la búsqueda y desactiva el botón
@@ -37,32 +61,31 @@ async function manejarBusqueda(evento) {
     botonBusqueda.disabled = true;
 
     try {
-        // Solicita los libros y espera hasta recibirlos
+        // Consulta los libros en Open Library
         const libros = await buscarLibros(texto);
 
-        // Informa cuando la consulta no devuelve coincidencias
+        // Informa cuando no hay coincidencias
         if (libros.length === 0) {
             mostrarMensaje("No se encontraron libros para esa búsqueda.");
             return;
         }
 
-        // Construye las tarjetas con los libros recibidos
-        mostrarLibros(libros);
+        // Entrega los libros y la función que atenderá el botón Agregar
+        mostrarLibros(libros, manejarAgregarLectura);
 
-        // Confirma cuántos libros se muestran en esta búsqueda
         mostrarMensaje(`Se muestran ${libros.length} libros.`);
 
     } catch (error) {
-        // Muestra un mensaje si falla la petición o el procesamiento de los datos
+        // Informa que la búsqueda no pudo completarse
         mostrarMensaje(
             "No se pudo completar la búsqueda. Intentá nuevamente en unos momentos."
         );
 
     } finally {
-        // Reactiva el botón tanto si la búsqueda funciona como si falla
+        // Reactiva el botón al terminar, incluso si hubo un error
         botonBusqueda.disabled = false;
     }
 }
 
-// Ejecuta la búsqueda al enviar el formulario con el botón o con Enter
+// Atiende el envío mediante el botón Buscar o la tecla Enter
 formularioBusqueda.addEventListener("submit", manejarBusqueda);
