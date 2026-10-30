@@ -73,11 +73,44 @@ function crearTarjetaLibro(libro) {
     anio.className = "card-text text-body-secondary";
     anio.textContent = `Primera publicación: ${libro.first_publish_year ?? "No disponible"}`;
 
-    // Coloca cada elemento dentro de su contenedor
-    cuerpo.append(titulo, autores, anio);
+    // Crea el botón que abrirá el detalle del libro
+    const botonDetalle = document.createElement("button");
+    botonDetalle.type = "button";
+    botonDetalle.className = "btn btn-outline-primary";
+    botonDetalle.textContent = "Ver detalle";
+
+    // Indica a Bootstrap qué componente debe abrir y cuál es su identificador
+    botonDetalle.setAttribute("data-bs-toggle", "modal");
+    botonDetalle.setAttribute("data-bs-target", "#modal-libro");
+
+    // Actualiza los datos del modal con el libro de esta tarjeta
+    botonDetalle.addEventListener("click", function () {
+        mostrarDetalleLibro(libro);
+    });
+
+    // Coloca los datos y el botón dentro de la tarjeta
+    cuerpo.append(titulo, autores, anio, botonDetalle);
     tarjeta.append(portada, cuerpo);
     columna.append(tarjeta);
 
     // Devuelve la columna completa para insertarla en los resultados
     return columna;
+}
+
+// Actualiza el modal con los datos del libro seleccionado
+function mostrarDetalleLibro(libro) {
+    // Localiza los espacios del modal donde se mostrarán los datos
+    const titulo = document.getElementById("modal-titulo");
+    const autores = document.getElementById("modal-autores");
+    const anio = document.getElementById("modal-anio");
+    const ediciones = document.getElementById("modal-ediciones");
+
+    // Une los autores para mostrarlos en una sola línea
+    const nombresAutores = (libro.author_name || []).join(", ");
+
+    // Inserta los datos como texto y cubre los valores que puedan faltar
+    titulo.textContent = libro.title || "Título no disponible";
+    autores.textContent = nombresAutores || "No disponibles";
+    anio.textContent = libro.first_publish_year ?? "No disponible";
+    ediciones.textContent = libro.edition_count ?? "No disponible";
 }
