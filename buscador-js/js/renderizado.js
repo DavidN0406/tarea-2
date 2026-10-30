@@ -146,7 +146,7 @@ export function agregarFilaLectura(lectura) {
     const lista = document.getElementById("lista-lecturas");
     const mensajeVacio = document.getElementById("lecturas-vacias");
 
-    // Identifica la fila con el mismo identificador del libro
+    // Relaciona la fila con el libro guardado en memoria
     const fila = document.createElement("tr");
     fila.dataset.id = lectura.id;
 
@@ -158,14 +158,57 @@ export function agregarFilaLectura(lectura) {
     const autores = document.createElement("td");
     autores.textContent = lectura.autores;
 
-    // Estado actual de la lectura
+    // Marca la celda para poder actualizar solamente el estado
     const estado = document.createElement("td");
+    estado.dataset.campo = "estado";
     estado.textContent = lectura.estado;
 
+    // Celda que contiene las acciones de esta lectura
+    const acciones = document.createElement("td");
+
+    const grupoBotones = document.createElement("div");
+    grupoBotones.className = "d-flex flex-wrap gap-2";
+
+    // Identifica la acción sin registrar un evento en cada botón
+    const botonEstado = document.createElement("button");
+    botonEstado.type = "button";
+    botonEstado.className = "btn btn-outline-primary btn-sm";
+    botonEstado.textContent = "Cambiar estado";
+    botonEstado.dataset.accion = "cambiar";
+
+    // Botón para quitar la lectura
+    const botonQuitar = document.createElement("button");
+    botonQuitar.type = "button";
+    botonQuitar.className = "btn btn-outline-danger btn-sm";
+    botonQuitar.textContent = "Quitar";
+    botonQuitar.dataset.accion = "quitar";
+
+    // Organiza los botones dentro de la celda de acciones
+    grupoBotones.append(botonEstado, botonQuitar);
+    acciones.append(grupoBotones);
+
     // Inserta únicamente la nueva fila
-    fila.append(titulo, autores, estado);
+    fila.append(titulo, autores, estado, acciones);
     lista.append(fila);
 
-    // La lista ya tiene contenido, por lo que se oculta el mensaje inicial
+    // Oculta el mensaje inicial porque la lista ya contiene un libro
     mensajeVacio.hidden = true;
+}
+
+// Actualiza solamente la celda del estado en la fila seleccionada
+export function actualizarEstadoEnFila(fila, lectura) {
+    const celdaEstado = fila.querySelector('[data-campo="estado"]');
+
+    celdaEstado.textContent = lectura.estado;
+}
+
+// Retira la fila seleccionada y comprueba si la tabla quedó vacía
+export function quitarFilaLectura(fila) {
+    fila.remove();
+
+    const lista = document.getElementById("lista-lecturas");
+    const mensajeVacio = document.getElementById("lecturas-vacias");
+
+    // Muestra el mensaje inicial cuando ya no quedan filas
+    mensajeVacio.hidden = lista.children.length > 0;
 }
