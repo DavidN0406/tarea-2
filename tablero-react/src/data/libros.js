@@ -1,5 +1,4 @@
 // Libros iniciales del club y el miembro que propuso cada uno
-
 export const librosIniciales = [
     {
         id: "libro-1",
@@ -22,4 +21,11 @@ export const librosIniciales = [
         estado: "Leído",
         miembroId: "miembro-3"
     }
+]
+
+// Orden en el que avanzan los estados de una lectura
+export const estadosLectura = [
+    "Pendiente",
+    "Leyendo",
+    "Leído"
 ]

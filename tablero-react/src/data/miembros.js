@@ -1,5 +1,4 @@
 // Miembros disponibles para proponer libros
-
 export const miembros = [
     {
         id: "miembro-1",

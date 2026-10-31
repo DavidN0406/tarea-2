@@ -1,11 +1,9 @@
 /* Modelo de tamaño de los elementos */
-
 * {
     box-sizing: border-box;
 }
 
 /* Apariencia general de la página */
-
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -14,7 +12,6 @@ body {
 }
 
 /* Contenedor principal adaptable */
-
 .contenedor {
     width: min(100% - 2rem, 72rem);
     margin-inline: auto;
@@ -22,13 +19,11 @@ body {
 }
 
 /* Separación del encabezado */
-
 .encabezado-tablero {
     margin-bottom: 2rem;
 }
 
 /* Contenedor reutilizable de secciones */
-
 .panel {
     padding: 1.25rem;
     margin-bottom: 1.5rem;
@@ -43,7 +38,6 @@ body {
 }
 
 /* Distribución de los libros en pantallas pequeñas */
-
 .lista-libros {
     display: grid;
     grid-template-columns: 1fr;
@@ -51,7 +45,6 @@ body {
 }
 
 /* Presentación de cada libro */
-
 .tarjeta-libro {
     min-width: 0;
     padding: 1.25rem;
@@ -76,7 +69,6 @@ body {
 }
 
 /* Dos columnas en pantallas medianas */
-
 @media (min-width: 48rem) {
     .lista-libros {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -84,9 +76,46 @@ body {
 }
 
 /* Tres columnas en pantallas grandes */
-
 @media (min-width: 64rem) {
     .lista-libros {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+}
+
+/* Distribución de las acciones de cada libro */
+.acciones-libro {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+/* Botones del tablero */
+.boton {
+    padding: 0.65rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    background-color: #245c46;
+    color: #ffffff;
+    font: inherit;
+    cursor: pointer;
+}
+
+.boton:hover {
+    background-color: #194332;
+}
+
+/* Acción de quitar un libro */
+.boton-peligro {
+    background-color: #a52834;
+}
+
+.boton-peligro:hover {
+    background-color: #7f1f28;
+}
+
+/* Indicador de foco para navegar con el teclado */
+.boton:focus-visible {
+    outline: 3px solid #245c46;
+    outline-offset: 3px;
 }

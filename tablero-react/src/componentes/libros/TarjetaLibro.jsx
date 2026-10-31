@@ -1,6 +1,10 @@
-// Presentación de un libro y del miembro que lo propuso
-
-function TarjetaLibro({ libro, nombreMiembro }) {
+// Presentación del libro y botones para solicitar cambios a App
+function TarjetaLibro({
+    libro,
+    nombreMiembro,
+    alCambiarEstado,
+    alQuitar
+}) {
     return (
         <article className="tarjeta-libro">
             <h3 className="tarjeta-libro-titulo">
@@ -18,6 +22,25 @@ function TarjetaLibro({ libro, nombreMiembro }) {
             <p className="tarjeta-libro-estado">
                 <strong>Estado:</strong> {libro.estado}
             </p>
+
+            {/* Cada botón comunica el identificador del libro. */}
+            <div className="acciones-libro">
+                <button
+                    type="button"
+                    className="boton"
+                    onClick={() => alCambiarEstado(libro.id)}
+                >
+                    Cambiar estado
+                </button>
+
+                <button
+                    type="button"
+                    className="boton boton-peligro"
+                    onClick={() => alQuitar(libro.id)}
+                >
+                    Quitar
+                </button>
+            </div>
         </article>
     )
 }

@@ -1,9 +1,8 @@
 import TarjetaLibro from "./TarjetaLibro.jsx"
 
-// Lista de tarjetas con un mensaje cuando no hay libros
-
-function ListaLibros({ libros, miembros }) {
-    // Evita mostrar una cuadrícula vacía.
+// Lista de tarjetas: recibe los datos y las acciones desde App
+function ListaLibros({ libros, miembros, alCambiarEstado, alQuitar }) {
+    // Muestra un mensaje cuando la lista no tiene elementos.
     if (libros.length === 0) {
         return (
             <p className="mensaje-vacio" role="status">
@@ -15,7 +14,7 @@ function ListaLibros({ libros, miembros }) {
     return (
         <div className="lista-libros">
             {libros.map(function (libro) {
-                // Busca al miembro relacionado con este libro.
+                // Encuentra al miembro que propuso el libro.
                 const miembro = miembros.find(function (persona) {
                     return persona.id === libro.miembroId
                 })
@@ -29,6 +28,8 @@ function ListaLibros({ libros, miembros }) {
                         key={libro.id}
                         libro={libro}
                         nombreMiembro={nombreMiembro}
+                        alCambiarEstado={alCambiarEstado}
+                        alQuitar={alQuitar}
                     />
                 )
             })}
