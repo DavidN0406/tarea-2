@@ -1,0 +1,22 @@
+/* Modelo de tamaño de los elementos */
+
+* {
+    box-sizing: border-box;
+}
+
+/* Apariencia general de la página */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f7f5;
+    color: #24352c;
+}
+
+/* Contenedor principal adaptable */
+
+.contenedor {
+    width: min(100% - 2rem, 72rem);
+    margin-inline: auto;
+    padding-block: 2rem;
+}
