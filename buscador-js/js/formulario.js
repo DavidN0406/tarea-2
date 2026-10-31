@@ -1,3 +1,5 @@
+import { validarCampo, validarFormulario } from "./validacion.js";
+
 // Elementos principales del formulario de propuestas
 const formularioPropuesta = document.getElementById("formulario-propuesta");
 const campoAnio = document.getElementById("propuesta-anio");
@@ -153,44 +155,71 @@ function manejarQuitarAutor(evento) {
     vecino.querySelector("input").focus();
 }
 
-// Comprueba la propuesta sin enviarla ni recargar la página
+// Validación de la propuesta antes del envío
+
 function revisarPropuesta(evento) {
     evento.preventDefault();
 
-    // Revisa los límites por si cambió el día con la página abierta
+    // Actualiza los límites por si cambió el día.
     actualizarLimitesFecha();
 
-    // Incluye automáticamente los campos de autor agregados al formulario
-    if (!formularioPropuesta.reportValidity()) {
+    const esValido = validarFormulario(formularioPropuesta);
+
+    if (!esValido) {
         mensajePropuesta.hidden = true;
         return;
     }
 
     mensajePropuesta.textContent =
-        "Los datos cumplen la validación inicial. La propuesta todavía no se ha enviado.";
+        "Los datos son válidos. La propuesta todavía no se ha enviado.";
 
     mensajePropuesta.hidden = false;
 }
 
-// Prepara el formulario y registra sus eventos una sola vez
+// Preparación del formulario y sus eventos
+
 export function iniciarFormulario() {
+    // Permite que nuestro evento submit controle cómo se muestran los errores.
+    formularioPropuesta.noValidate = true;
+
     actualizarLimitesFecha();
 
-    // Crea el autor inicial usando las mismas reglas que los demás
+    // Prepara el primer autor y los botones para agregar o quitar.
     contenedorAutores.replaceChildren(crearCampoAutor());
     actualizarControlesAutores();
 
-    // Acciones para agregar y quitar campos de autor
     botonAgregarAutor.addEventListener("click", agregarAutor);
     contenedorAutores.addEventListener("click", manejarQuitarAutor);
 
-    // Mantiene los límites de fecha actualizados al utilizar el formulario
-    formularioPropuesta.addEventListener("focusin", actualizarLimitesFecha);
+    // Mantiene actualizados el año máximo y la fecha mínima.
+    formularioPropuesta.addEventListener(
+        "focusin",
+        actualizarLimitesFecha
+    );
 
-    // Oculta la confirmación cuando se modifican los datos
-    formularioPropuesta.addEventListener("input", function () {
-        mensajePropuesta.hidden = true;
+    // Revisa el campo cuando el usuario termina de editarlo y sale de él.
+    formularioPropuesta.addEventListener("focusout", function (evento) {
+        const campo = evento.target;
+
+        if (campo.matches("input, select, textarea")) {
+            validarCampo(campo);
+        }
     });
 
+    // Actualiza los errores mientras el usuario corrige un campo.
+    formularioPropuesta.addEventListener("input", function (evento) {
+        mensajePropuesta.hidden = true;
+
+        const campo = evento.target;
+
+        if (
+            campo.matches("input, select, textarea") &&
+            campo.classList.contains("is-invalid")
+        ) {
+            validarCampo(campo);
+        }
+    });
+
+    // Revisa todos los campos al presionar el botón del formulario.
     formularioPropuesta.addEventListener("submit", revisarPropuesta);
 }
