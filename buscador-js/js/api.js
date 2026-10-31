@@ -21,3 +21,26 @@ export async function buscarLibros(texto) {
     // Open Library entrega el arreglo de libros dentro de "docs"
     return datos.docs;
 }
+
+// Envío de propuestas a la API de práctica
+
+export async function enviarPropuesta(propuesta) {
+    const respuesta = await fetch(
+        "https://jsonplaceholder.typicode.com/posts",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify(propuesta)
+        }
+    );
+
+    // Una respuesta HTTP con error también debe detener el proceso.
+    if (!respuesta.ok) {
+        throw new Error(`Error al enviar la propuesta: ${respuesta.status}`);
+    }
+
+    // Convierte la respuesta JSON en un objeto de JavaScript.
+    return respuesta.json();
+}

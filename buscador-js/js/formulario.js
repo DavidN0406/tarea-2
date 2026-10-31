@@ -1,4 +1,5 @@
 import { validarCampo, validarFormulario } from "./validacion.js";
+import { enviarPropuesta } from "./api.js";
 
 // Elementos principales del formulario de propuestas
 const formularioPropuesta = document.getElementById("formulario-propuesta");
@@ -14,6 +15,12 @@ const contadorAutores = document.getElementById("contador-autores");
 // Límites de campos permitidos
 const MIN_AUTORES = 1;
 const MAX_AUTORES = 5;
+
+// Botón que inicia el envío de la propuesta    
+
+const botonEnviarPropuesta = formularioPropuesta.querySelector(
+    'button[type="submit"]'
+);
 
 // Genera identificadores únicos aunque se eliminen campos intermedios
 let siguienteIdAutor = 1;
@@ -155,29 +162,103 @@ function manejarQuitarAutor(evento) {
     vecino.querySelector("input").focus();
 }
 
-// Validación de la propuesta antes del envío
+// Obtención de los datos del formulario
 
-function revisarPropuesta(evento) {
+function obtenerPropuesta() {
+    const datos = new FormData(formularioPropuesta);
+
+    return {
+        titulo: datos.get("titulo").trim(),
+
+        // getAll obtiene todos los autores, porque comparten el mismo name.
+        autores: datos.getAll("autores").map(function (autor) {
+            return autor.trim();
+        }),
+
+        // Los valores del formulario se convierten a números.
+        anio: Number(datos.get("anio")),
+        paginas: Number(datos.get("paginas")),
+
+        genero: datos.get("genero"),
+        correo: datos.get("correo").trim(),
+        fecha: datos.get("fecha"),
+        motivo: datos.get("motivo").trim()
+    };
+}
+
+// Mensajes sobre el estado del envío
+
+function mostrarMensajePropuesta(texto, tipo = "info") {
+    mensajePropuesta.textContent = texto;
+    mensajePropuesta.className = `alert alert-${tipo} mt-3`;
+    mensajePropuesta.hidden = false;
+}
+
+// Validación y envío de la propuesta
+
+async function revisarPropuesta(evento) {
     evento.preventDefault();
 
-    // Actualiza los límites por si cambió el día.
+    // Evita iniciar otra solicitud mientras hay un envío en proceso.
+    if (botonEnviarPropuesta.disabled) {
+        return;
+    }
+
     actualizarLimitesFecha();
 
-    const esValido = validarFormulario(formularioPropuesta);
-
-    if (!esValido) {
+    // Solo permite enviar si todos los campos son válidos.
+    if (!validarFormulario(formularioPropuesta)) {
         mensajePropuesta.hidden = true;
         return;
     }
 
-    mensajePropuesta.textContent =
-        "Los datos son válidos. La propuesta todavía no se ha enviado.";
+    const propuesta = obtenerPropuesta();
 
-    mensajePropuesta.hidden = false;
+    // Guarda el estado de los controles antes de bloquear el formulario.
+    const controles = Array.from(
+        formularioPropuesta.querySelectorAll(
+            "input, select, textarea, button"
+        )
+    );
+
+    const estadosAnteriores = controles.map(function (control) {
+        return control.disabled;
+    });
+
+    // Evita cambios en los datos mientras se están enviando.
+    controles.forEach(function (control) {
+        control.disabled = true;
+    });
+
+    botonEnviarPropuesta.textContent = "Enviando...";
+    formularioPropuesta.setAttribute("aria-busy", "true");
+
+    mostrarMensajePropuesta("Enviando la propuesta...");
+
+    try {
+        const respuesta = await enviarPropuesta(propuesta);
+
+        mostrarMensajePropuesta(
+            `Propuesta enviada correctamente. Identificador de prueba: ${respuesta.id}. Este registro es simulado.`,
+            "success"
+        );
+    } catch {
+        mostrarMensajePropuesta(
+            "No se pudo enviar la propuesta. Revisá tu conexión e intentá nuevamente.",
+            "danger"
+        );
+    } finally {
+        // Restaura los controles tanto si el envío funciona como si falla.
+        controles.forEach(function (control, indice) {
+            control.disabled = estadosAnteriores[indice];
+        });
+
+        botonEnviarPropuesta.textContent = "Enviar propuesta";
+        formularioPropuesta.setAttribute("aria-busy", "false");
+    }
 }
 
 // Preparación del formulario y sus eventos
-
 export function iniciarFormulario() {
     // Permite que nuestro evento submit controle cómo se muestran los errores.
     formularioPropuesta.noValidate = true;
