@@ -11907,5 +11907,33 @@ textarea.form-control-lg {
     animation-duration: 1ms;
   }
 }
+.resultados-libros {
+  --columnas-resultados: 1;
+  --espacio-resultados: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(var(--columnas-resultados), minmax(0, 1fr));
+  gap: var(--espacio-resultados);
+}
+
+.resultado-libro {
+  min-width: 0;
+}
+.resultado-libro .card {
+  height: 100%;
+}
+.resultado-libro .card-title {
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 48rem) {
+  .resultados-libros {
+    --columnas-resultados: 2;
+  }
+}
+@media (min-width: 64rem) {
+  .resultados-libros {
+    --columnas-resultados: 3;
+  }
+}
 
 /*# sourceMappingURL=estilos.css.map */

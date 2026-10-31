@@ -1,0 +1,12 @@
+@use "variables";
+
+@use "../node_modules/bootstrap/scss/bootstrap" with (
+    $primary: variables.$color-principal,
+    $font-family-sans-serif: variables.$fuente-principal,
+    $border-radius: variables.$radio-bordes
+);
+
+// Estilos propios de los componentes de la aplicación
+@use "componentes";
+
+@use "resultados";

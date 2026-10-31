@@ -1,0 +1,49 @@
+@use "variables";
+@use "funciones";
+@use "mixins";
+
+// Cuadrícula de resultados: comienza con una columna.
+
+.resultados-libros {
+    --columnas-resultados: 1;
+    --espacio-resultados: #{funciones.a-rem(24)};
+
+    display: grid;
+    grid-template-columns: repeat(
+        var(--columnas-resultados),
+        minmax(0, 1fr)
+    );
+    gap: var(--espacio-resultados);
+}
+
+// Ajustes de las tarjetas dentro de la cuadrícula
+
+.resultado-libro {
+    min-width: 0;
+
+    // La tarjeta ocupa toda la altura disponible en su fila.
+    .card {
+        height: 100%;
+    }
+
+    // Evita que un título largo se salga de la tarjeta.
+    .card-title {
+        overflow-wrap: anywhere;
+    }
+}
+
+// Pantallas medianas: dos columnas.
+
+@include mixins.desde(variables.$pantalla-mediana) {
+    .resultados-libros {
+        --columnas-resultados: 2;
+    }
+}
+
+// Pantallas grandes: tres columnas.
+
+@include mixins.desde(variables.$pantalla-grande) {
+    .resultados-libros {
+        --columnas-resultados: 3;
+    }
+}

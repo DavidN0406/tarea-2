@@ -1,0 +1,6 @@
+// Aplica los estilos recibidos a partir del ancho indicado.
+@mixin desde($ancho) {
+    @media (min-width: $ancho) {
+        @content;
+    }
+}

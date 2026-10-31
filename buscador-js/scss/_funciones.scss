@@ -1,0 +1,6 @@
+@use "sass:math";
+
+// Convierte una medida de diseño a rem usando una base de 16.
+@function a-rem($medida) {
+    @return math.div($medida, 16) * 1rem;
+}

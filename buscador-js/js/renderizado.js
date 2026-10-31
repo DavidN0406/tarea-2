@@ -26,7 +26,7 @@ export function mostrarLibros(libros, alAgregar) {
 function crearTarjetaLibro(libro, alAgregar) {
     // Organiza una tarjeta por fila en móvil, dos en md y tres en lg
     const columna = document.createElement("div");
-    columna.className = "col-12 col-md-6 col-lg-4";
+    columna.className = "resultado-libro";
 
     // Agrupa la portada y los datos del libro
     const tarjeta = document.createElement("article");
