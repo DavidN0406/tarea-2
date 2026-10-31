@@ -119,3 +119,57 @@ body {
     outline: 3px solid #245c46;
     outline-offset: 3px;
 }
+
+/* Organización del formulario de libros */
+.formulario-libro {
+    display: grid;
+    gap: 1rem;
+}
+
+.campo-formulario {
+    display: grid;
+    gap: 0.4rem;
+}
+
+.campo-formulario label {
+    font-weight: bold;
+}
+
+/* Controles de entrada */
+.campo-formulario input,
+.campo-formulario select {
+    width: 100%;
+    min-width: 0;
+    padding: 0.7rem;
+    border: 1px solid #87988d;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    color: inherit;
+    font: inherit;
+}
+
+/* Foco visible y campos con errores */
+.campo-formulario input:focus-visible,
+.campo-formulario select:focus-visible {
+    outline: 2px solid #245c46;
+    outline-offset: 2px;
+}
+
+.campo-formulario [aria-invalid="true"] {
+    border-color: #a52834;
+}
+
+.error-campo {
+    color: #a52834;
+    font-size: 0.9rem;
+}
+
+/* Botón y confirmación del formulario */
+.formulario-libro > .boton {
+    justify-self: start;
+}
+
+.mensaje-formulario {
+    margin: 0;
+    color: #245c46;
+}

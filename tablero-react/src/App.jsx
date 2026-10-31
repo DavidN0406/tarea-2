@@ -5,11 +5,25 @@ import { miembros } from "./data/miembros.js"
 
 import Panel from "./componentes/comunes/Panel.jsx"
 import ListaLibros from "./componentes/libros/ListaLibros.jsx"
+import FormularioLibro from "./componentes/libros/FormularioLibro.jsx"
 
 // Componente principal y estado compartido del tablero
 
 function App() {
     const [libros, setLibros] = useState(librosIniciales)
+
+    // Agrega un libro con identificador propio y estado inicial Pendiente.
+    function agregarLibro(datos) {
+        const nuevoLibro = {
+            ...datos,
+            id: crypto.randomUUID(),
+            estado: "Pendiente"
+        }
+
+        setLibros(function (librosActuales) {
+            return [...librosActuales, nuevoLibro]
+        })
+    }
 
     // Avanza el estado del libro sin modificar el objeto original.
     function cambiarEstadoLibro(id) {
@@ -53,6 +67,14 @@ function App() {
                     propuso cada libro.
                 </p>
             </header>
+
+            {/* Formulario que comunica los nuevos libros a App */}
+            <Panel titulo="Agregar una lectura">
+                <FormularioLibro
+                    miembros={miembros}
+                    alAgregar={agregarLibro}
+                />
+            </Panel>
 
             <Panel titulo={`Libros del club (${libros.length})`}>
                 <ListaLibros
