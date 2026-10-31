@@ -153,30 +153,30 @@
                         >
                     </div>
 
-                    <!-- Grupo de autores; después permitiremos agregar más campos -->
+                    <!-- Autores de la propuesta: mínimo uno y máximo cinco -->
                     <fieldset class="col-12">
                         <legend class="fs-6">
                             Autores
                         </legend>
 
-                        <div id="contenedor-autores">
-                            <div class="mb-3" data-campo-autor>
-                                <label for="autor-1" class="form-label">
-                                    Autor 1
-                                </label>
+                        <!-- JavaScript creará aquí los campos de autor -->
+                        <div id="contenedor-autores"></div>
 
-                                <input
-                                    type="text"
-                                    id="autor-1"
-                                    name="autores"
-                                    class="form-control"
-                                    minlength="2"
-                                    maxlength="100"
-                                    pattern=".*\S.*"
-                                    required
-                                >
-                            </div>
-                        </div>
+                        <!-- Agrega otro campo sin enviar el formulario -->
+                        <button
+                            type="button"
+                            id="agregar-autor"
+                            class="btn btn-outline-primary btn-sm"
+                        >
+                            Agregar autor
+                        </button>
+
+                        <!-- Informa cuántos campos de autor hay disponibles -->
+                        <p
+                            id="contador-autores"
+                            class="form-text"
+                            role="status"
+                        ></p>
                     </fieldset>
 
                     <!-- Año en que se publicó el libro -->
