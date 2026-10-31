@@ -122,6 +122,183 @@
                     </table>
                 </div>
             </section>
+
+                        <!-- Formulario para proponer una lectura al club -->
+            <section class="mt-5" aria-labelledby="titulo-propuesta">
+                <h2 id="titulo-propuesta" class="h3 mb-3">
+                    Proponer una lectura
+                </h2>
+
+                <p class="text-body-secondary">
+                    Compartí un libro que te gustaría leer en una próxima sesión.
+                </p>
+
+                <form id="formulario-propuesta" class="row g-3">
+
+                    <!-- Título del libro propuesto -->
+                    <div class="col-12">
+                        <label for="propuesta-titulo" class="form-label">
+                            Título del libro
+                        </label>
+
+                        <input
+                            type="text"
+                            id="propuesta-titulo"
+                            name="titulo"
+                            class="form-control"
+                            minlength="2"
+                            maxlength="150"
+                            pattern=".*\S.*"
+                            required
+                        >
+                    </div>
+
+                    <!-- Grupo de autores; después permitiremos agregar más campos -->
+                    <fieldset class="col-12">
+                        <legend class="fs-6">
+                            Autores
+                        </legend>
+
+                        <div id="contenedor-autores">
+                            <div class="mb-3" data-campo-autor>
+                                <label for="autor-1" class="form-label">
+                                    Autor 1
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="autor-1"
+                                    name="autores"
+                                    class="form-control"
+                                    minlength="2"
+                                    maxlength="100"
+                                    pattern=".*\S.*"
+                                    required
+                                >
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Año en que se publicó el libro -->
+                    <div class="col-12 col-md-6">
+                        <label for="propuesta-anio" class="form-label">
+                            Año de publicación
+                        </label>
+
+                        <input
+                            type="number"
+                            id="propuesta-anio"
+                            name="anio"
+                            class="form-control"
+                            min="1"
+                            step="1"
+                            required
+                        >
+                    </div>
+
+                    <!-- Cantidad de páginas del libro -->
+                    <div class="col-12 col-md-6">
+                        <label for="propuesta-paginas" class="form-label">
+                            Cantidad de páginas
+                        </label>
+
+                        <input
+                            type="number"
+                            id="propuesta-paginas"
+                            name="paginas"
+                            class="form-control"
+                            min="1"
+                            step="1"
+                            required
+                        >
+                    </div>
+
+                    <!-- Selección del género del libro -->
+                    <div class="col-12 col-md-6">
+                        <label for="propuesta-genero" class="form-label">
+                            Género
+                        </label>
+
+                        <select
+                            id="propuesta-genero"
+                            name="genero"
+                            class="form-select"
+                            required
+                        >
+                            <option value="">Seleccioná un género</option>
+                            <option value="novela">Novela</option>
+                            <option value="cuento">Cuento</option>
+                            <option value="poesia">Poesía</option>
+                            <option value="ensayo">Ensayo</option>
+                            <option value="biografia">Biografía</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <!-- Correo de la persona que propone la lectura -->
+                    <div class="col-12 col-md-6">
+                        <label for="propuesta-correo" class="form-label">
+                            Tu correo electrónico
+                        </label>
+
+                        <input
+                            type="email"
+                            id="propuesta-correo"
+                            name="correo"
+                            class="form-control"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+
+                    <!-- Fecha sugerida para la sesión del club -->
+                    <div class="col-12 col-md-6">
+                        <label for="propuesta-fecha" class="form-label">
+                            Fecha propuesta para la sesión
+                        </label>
+
+                        <input
+                            type="date"
+                            id="propuesta-fecha"
+                            name="fecha"
+                            class="form-control"
+                            required
+                        >
+                    </div>
+
+                    <!-- Explicación de por qué se recomienda el libro -->
+                    <div class="col-12">
+                        <label for="propuesta-motivo" class="form-label">
+                            ¿Por qué proponés este libro?
+                        </label>
+
+                        <textarea
+                            id="propuesta-motivo"
+                            name="motivo"
+                            class="form-control"
+                            rows="4"
+                            minlength="10"
+                            maxlength="1000"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <!-- Comprueba los datos; el envío se incorporará después -->
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            Revisar propuesta
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Mensaje sobre el resultado de la revisión -->
+                <p
+                    id="mensaje-propuesta"
+                    class="alert alert-info mt-3"
+                    role="status"
+                    hidden
+                ></p>
+            </section>
         </main>
 
         <!-- Pie de página -->

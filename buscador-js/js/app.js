@@ -18,6 +18,10 @@ import {
     quitarFilaLectura
 } from "./renderizado.js";
 
+// Configuración del formulario de propuestas
+import { iniciarFormulario } from "./formulario.js";
+
+
 // Elementos del formulario de búsqueda
 const formularioBusqueda = document.getElementById("formulario-busqueda");
 const textoBusqueda = document.getElementById("texto-busqueda");
@@ -156,3 +160,6 @@ async function manejarAccionLectura(evento) {
 
 // Una sola escucha controla las acciones de todas las lecturas
 listaLecturas.addEventListener("click", manejarAccionLectura);
+
+// Activa los límites de fecha y los eventos del formulario
+iniciarFormulario();
