@@ -20,3 +20,73 @@ body {
     margin-inline: auto;
     padding-block: 2rem;
 }
+
+/* Separación del encabezado */
+
+.encabezado-tablero {
+    margin-bottom: 2rem;
+}
+
+/* Contenedor reutilizable de secciones */
+
+.panel {
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    background-color: #ffffff;
+    border: 1px solid #dce4de;
+    border-radius: 0.75rem;
+}
+
+.panel-titulo {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+}
+
+/* Distribución de los libros en pantallas pequeñas */
+
+.lista-libros {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+/* Presentación de cada libro */
+
+.tarjeta-libro {
+    min-width: 0;
+    padding: 1.25rem;
+    border: 1px solid #dce4de;
+    border-radius: 0.75rem;
+    background-color: #f8faf8;
+}
+
+.tarjeta-libro-titulo {
+    margin-top: 0;
+    overflow-wrap: anywhere;
+}
+
+.tarjeta-libro-estado {
+    margin-bottom: 0;
+    color: #245c46;
+}
+
+.mensaje-vacio {
+    margin: 0;
+    color: #526158;
+}
+
+/* Dos columnas en pantallas medianas */
+
+@media (min-width: 48rem) {
+    .lista-libros {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Tres columnas en pantallas grandes */
+
+@media (min-width: 64rem) {
+    .lista-libros {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
