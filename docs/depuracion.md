@@ -55,3 +55,71 @@ para utilizarlo como ícono de la pestaña.
 Los mensajes relacionados con extensiones se revisaron en una ventana
 privada con las extensiones deshabilitadas. Tras la comprobación,
 la búsqueda funcionó sin los errores anteriores.
+
+## Medición y optimización de la búsqueda
+
+### Condiciones de la prueba
+
+Se utilizó el panel Network de DevTools con la caché deshabilitada,
+sin limitación de velocidad y sin conservar el registro entre recargas.
+
+En ambas pruebas se buscó `harry potter`, manteniendo el mismo tamaño
+de ventana y desplazándose hasta la última tarjeta para cargar las
+portadas.
+
+La medición general incluye la carga de la página y una búsqueda.
+
+### Optimización aplicada
+
+Se agregó el parámetro `fields` a la consulta de Open Library para
+solicitar únicamente los campos utilizados por la aplicación:
+
+- key
+- title
+- author_name
+- first_publish_year
+- cover_i
+- edition_count
+
+Se mantuvo el límite de 12 resultados.
+
+### Resultados
+
+| Medición | Antes | Después |
+|---|---:|---:|
+| Solicitudes totales | 41 | 41 |
+| Transferencia total | 687 kB | 682 kB |
+| Tamaño total de recursos | 676 kB | 656 kB |
+| Transferencia de la búsqueda | 6,0 kB | 904 B |
+| JSON descomprimido | 22,4 kB | 2,2 kB |
+| Tiempo de la búsqueda | 599 ms | 503 ms |
+| Estado HTTP de la búsqueda | 200 | 200 |
+
+El tamaño del JSON descomprimido se redujo aproximadamente un 90,2 %,
+calculado a partir de los valores redondeados mostrados por DevTools:
+
+(22,4 - 2,2) / 22,4 × 100 ≈ 90,2 %
+
+La cantidad de solicitudes no cambió porque la optimización reduce
+los campos recibidos, sin eliminar solicitudes.
+
+La reducción del peso total de la página es menor porque también
+se descargan imágenes, estilos y otros archivos.
+
+El tiempo de respuesta fue menor en esta prueba, pero una sola
+comparación no demuestra una mejora constante de velocidad:
+también depende de la conexión y del servidor.
+
+### Evidencias
+
+Antes de la optimización:
+
+![Medición general antes](capturas/network-antes.png)
+
+![Solicitud de búsqueda antes](capturas/busqueda-antes.png)
+
+Después de la optimización:
+
+![Medición general después](capturas/network-despues.png)
+
+![Solicitud de búsqueda después](capturas/busqueda-despues.png)
