@@ -11859,5 +11859,53 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.libro-portada {
+  height: 16rem;
+  object-fit: contain;
+  padding: 1rem;
+  background-color: #eef2ef;
+}
+
+.lectura-fila {
+  --duracion-salida: 300ms;
+  opacity: 1;
+  transition: opacity var(--duracion-salida) ease;
+}
+.lectura-fila.lectura-entrando {
+  animation: entrada-lectura 300ms ease;
+}
+.lectura-fila.lectura-saliendo {
+  opacity: 0;
+}
+
+.estado-actualizado {
+  animation: cambio-estado 350ms ease;
+}
+
+@keyframes entrada-lectura {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes cambio-estado {
+  from {
+    opacity: 0.3;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lectura-fila {
+    --duracion-salida: 1ms;
+  }
+  .lectura-fila.lectura-entrando,
+  .estado-actualizado {
+    animation-duration: 1ms;
+  }
+}
 
 /*# sourceMappingURL=estilos.css.map */

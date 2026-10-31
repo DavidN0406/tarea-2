@@ -146,9 +146,10 @@ export function agregarFilaLectura(lectura) {
     const lista = document.getElementById("lista-lecturas");
     const mensajeVacio = document.getElementById("lecturas-vacias");
 
-    // Relaciona la fila con el libro guardado en memoria
+    // Relaciona la fila con el libro y prepara su animación de entrada
     const fila = document.createElement("tr");
     fila.dataset.id = lectura.id;
+    fila.classList.add("lectura-fila", "lectura-entrando");
 
     // Nombre del libro
     const titulo = document.createElement("td");
@@ -193,22 +194,78 @@ export function agregarFilaLectura(lectura) {
 
     // Oculta el mensaje inicial porque la lista ya contiene un libro
     mensajeVacio.hidden = true;
+
+    
 }
 
-// Actualiza solamente la celda del estado en la fila seleccionada
+// Actualiza y anima únicamente la celda del estado
 export function actualizarEstadoEnFila(fila, lectura) {
     const celdaEstado = fila.querySelector('[data-campo="estado"]');
 
+    // Actualiza el dato visible
     celdaEstado.textContent = lectura.estado;
+
+    // Retira la clase para poder repetir la animación en cada cambio
+    celdaEstado.classList.remove("estado-actualizado");
+
+    // Hace que el navegador procese la retirada antes de volver a agregarla
+    void celdaEstado.offsetWidth;
+
+    // Inicia nuevamente la animación
+    celdaEstado.classList.add("estado-actualizado");
 }
 
-// Retira la fila seleccionada y comprueba si la tabla quedó vacía
+// Desvanece la fila y avisa cuando terminó de retirarla
 export function quitarFilaLectura(fila) {
-    fila.remove();
+    // Marca la fila para evitar otras acciones mientras se elimina
+    fila.dataset.eliminando = "true";
 
-    const lista = document.getElementById("lista-lecturas");
-    const mensajeVacio = document.getElementById("lecturas-vacias");
+    // Desactiva sus botones durante la salida
+    fila.querySelectorAll("button").forEach(function (boton) {
+        boton.disabled = true;
+    });
 
-    // Muestra el mensaje inicial cuando ya no quedan filas
-    mensajeVacio.hidden = lista.children.length > 0;
+    // Evita que una entrada todavía activa interfiera con la salida
+    fila.classList.remove("lectura-entrando");
+    void fila.offsetWidth;
+
+    // Permite que app.js espere hasta que la fila haya sido retirada
+    return new Promise(function (resolve) {
+        let temporizador;
+
+        // Retira la fila, limpia la escucha y confirma que terminó
+        function finalizar() {
+            clearTimeout(temporizador);
+            fila.removeEventListener("transitionend", manejarFinTransicion);
+
+            fila.remove();
+
+            const lista = document.getElementById("lista-lecturas");
+            const mensajeVacio = document.getElementById("lecturas-vacias");
+
+            mensajeVacio.hidden = lista.children.length > 0;
+
+            resolve();
+        }
+
+        // Atiende solamente el final de la transición de opacidad de esta fila
+        function manejarFinTransicion(evento) {
+            if (evento.target === fila && evento.propertyName === "opacity") {
+                finalizar();
+            }
+        }
+
+        // Escucha el final antes de activar el desvanecimiento
+        fila.addEventListener("transitionend", manejarFinTransicion);
+        fila.classList.add("lectura-saliendo");
+
+        // Lee la duración definida en CSS, expresada en milisegundos
+        const estilos = getComputedStyle(fila);
+        const duracion = parseFloat(
+            estilos.getPropertyValue("--duracion-salida")
+        ) || 0;
+
+        // Respaldo si la transición no llega a emitir su evento de finalización
+        temporizador = setTimeout(finalizar, duracion + 100);
+    });
 }

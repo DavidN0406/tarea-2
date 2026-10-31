@@ -99,22 +99,28 @@ async function manejarBusqueda(evento) {
 // Atiende el envío mediante el botón Buscar o la tecla Enter
 formularioBusqueda.addEventListener("submit", manejarBusqueda);
 
-// Atiende los botones de todas las filas desde un único contenedor
-function manejarAccionLectura(evento) {
-    // Encuentra el botón incluso si se hace clic en un elemento dentro de él
+// Atiende las acciones de la lista desde un único contenedor
+async function manejarAccionLectura(evento) {
+    // Identifica el botón que originó la acción
     const boton = evento.target.closest("button[data-accion]");
 
-    // Ignora clics que no correspondan a un botón de esta lista
+    // Ignora clics que no correspondan a los botones de esta lista
     if (!boton || !listaLecturas.contains(boton)) {
         return;
     }
 
-    // Obtiene la fila, el identificador del libro y la acción solicitada
+    // Localiza la fila correspondiente al botón
     const fila = boton.closest("tr[data-id]");
+
+    // Evita actuar sobre una fila que ya está saliendo
+    if (!fila || fila.dataset.eliminando === "true") {
+        return;
+    }
+
     const id = fila.dataset.id;
     const accion = boton.dataset.accion;
 
-    // Cambia primero el dato en memoria y después su celda en pantalla
+    // Actualiza el estado en memoria y después su representación visual
     if (accion === "cambiar") {
         const lectura = cambiarEstadoLectura(id);
 
@@ -131,15 +137,15 @@ function manejarAccionLectura(evento) {
         return;
     }
 
-    // Elimina primero el dato en memoria y después la fila en pantalla
+    // Espera la salida visual antes de quitar el libro del arreglo
     if (accion === "quitar") {
+        await quitarFilaLectura(fila);
+
         const lecturaEliminada = quitarLectura(id);
 
         if (!lecturaEliminada) {
             return;
         }
-
-        quitarFilaLectura(fila);
 
         mostrarMensajeLecturas(
             `Se quitó "${lecturaEliminada.titulo}" de tu lista.`,
@@ -148,5 +154,5 @@ function manejarAccionLectura(evento) {
     }
 }
 
-// Una sola escucha atiende los botones actuales y los que se agreguen después
+// Una sola escucha controla las acciones de todas las lecturas
 listaLecturas.addEventListener("click", manejarAccionLectura);

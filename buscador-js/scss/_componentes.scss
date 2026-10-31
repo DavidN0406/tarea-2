@@ -5,3 +5,61 @@
     padding: 1rem;
     background-color: #eef2ef;
 }
+
+// Apariencia y transición de las filas de lectura
+.lectura-fila {
+    // Se expresa en milisegundos para compartir la duración con JavaScript
+    --duracion-salida: 300ms;
+
+    opacity: 1;
+    transition: opacity var(--duracion-salida) ease;
+
+    // Se aplica cuando una lectura acaba de agregarse
+    &.lectura-entrando {
+        animation: entrada-lectura 300ms ease;
+    }
+
+    // Inicia el desvanecimiento antes de retirar la fila
+    &.lectura-saliendo {
+        opacity: 0;
+    }
+}
+
+// Destaca visualmente la celda cuyo estado acaba de cambiar
+.estado-actualizado {
+    animation: cambio-estado 350ms ease;
+}
+
+// Hace aparecer la fila gradualmente
+@keyframes entrada-lectura {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+// Produce un cambio breve de opacidad en la celda del estado
+@keyframes cambio-estado {
+    from {
+        opacity: 0.3;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+// Reduce los efectos si el usuario lo solicita en su sistema
+@media (prefers-reduced-motion: reduce) {
+    .lectura-fila {
+        --duracion-salida: 1ms;
+    }
+
+    .lectura-fila.lectura-entrando,
+    .estado-actualizado {
+        animation-duration: 1ms;
+    }
+}
