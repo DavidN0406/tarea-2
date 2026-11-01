@@ -6,11 +6,39 @@ import { miembros } from "./data/miembros.js"
 import Panel from "./componentes/comunes/Panel.jsx"
 import ListaLibros from "./componentes/libros/ListaLibros.jsx"
 import FormularioLibro from "./componentes/libros/FormularioLibro.jsx"
+import FiltrosLibros from "./componentes/libros/FiltrosLibros.jsx"
+import ResumenLecturas from "./componentes/libros/ResumenLecturas.jsx"
 
 // Componente principal y estado compartido del tablero
 
 function App() {
+    // Datos y selecciones que pueden cambiar.
     const [libros, setLibros] = useState(librosIniciales)
+    const [filtroEstado, setFiltroEstado] = useState("")
+    const [filtroMiembro, setFiltroMiembro] = useState("")
+
+    // Calcula los libros que cumplen ambos filtros.
+    const librosFiltrados = libros.filter(function (libro) {
+        const coincideEstado =
+            filtroEstado === "" || libro.estado === filtroEstado
+
+        const coincideMiembro =
+            filtroMiembro === "" || libro.miembroId === filtroMiembro
+
+        return coincideEstado && coincideMiembro
+    })
+
+    // Calcula los conteos a partir de los resultados actuales.
+    const conteos = estadosLectura.map(function (estado) {
+        const cantidad = librosFiltrados.filter(function (libro) {
+            return libro.estado === estado
+        }).length
+
+        return {
+            estado,
+            cantidad
+        }
+    })
 
     // Agrega un libro con identificador propio y estado inicial Pendiente.
     function agregarLibro(datos) {
@@ -29,7 +57,6 @@ function App() {
     function cambiarEstadoLibro(id) {
         setLibros(function (librosActuales) {
             return librosActuales.map(function (libro) {
-                // Conserva los libros que no corresponden al seleccionado.
                 if (libro.id !== id) {
                     return libro
                 }
@@ -38,7 +65,6 @@ function App() {
                 const siguientePosicion =
                     (posicionActual + 1) % estadosLectura.length
 
-                // Crea una copia del libro con el nuevo estado.
                 return {
                     ...libro,
                     estado: estadosLectura[siguientePosicion]
@@ -68,7 +94,7 @@ function App() {
                 </p>
             </header>
 
-            {/* Formulario que comunica los nuevos libros a App */}
+            {/* Formulario para registrar nuevas lecturas */}
             <Panel titulo="Agregar una lectura">
                 <FormularioLibro
                     miembros={miembros}
@@ -76,9 +102,25 @@ function App() {
                 />
             </Panel>
 
+            {/* Filtros, resumen y lista comparten los datos de App. */}
             <Panel titulo={`Libros del club (${libros.length})`}>
+                <FiltrosLibros
+                    estados={estadosLectura}
+                    miembros={miembros}
+                    estadoSeleccionado={filtroEstado}
+                    miembroSeleccionado={filtroMiembro}
+                    alCambiarEstado={setFiltroEstado}
+                    alCambiarMiembro={setFiltroMiembro}
+                />
+
+                <ResumenLecturas conteos={conteos} />
+
+                <p className="cantidad-resultados" role="status">
+                    Mostrando {librosFiltrados.length} de {libros.length} libros.
+                </p>
+
                 <ListaLibros
-                    libros={libros}
+                    libros={librosFiltrados}
                     miembros={miembros}
                     alCambiarEstado={cambiarEstadoLibro}
                     alQuitar={quitarLibro}

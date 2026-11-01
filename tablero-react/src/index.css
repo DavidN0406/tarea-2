@@ -173,3 +173,58 @@ body {
     margin: 0;
     color: #245c46;
 }
+
+/* Distribución de los filtros */
+.filtros-libros {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+/* Sección de resumen */
+.resumen-lecturas {
+    margin-top: 1.5rem;
+}
+
+.resumen-conteos {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin: 0;
+}
+
+/* Cantidad de libros en cada estado */
+.resumen-item {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: #edf4ef;
+    text-align: center;
+}
+
+.resumen-item dt {
+    font-weight: bold;
+}
+
+.resumen-cantidad {
+    margin: 0.5rem 0 0;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #245c46;
+}
+
+/* Información de los resultados visibles */
+.cantidad-resultados {
+    margin-block: 1.25rem;
+    color: #526158;
+}
+
+/* Distribución para pantallas medianas y grandes */
+@media (min-width: 48rem) {
+    .filtros-libros {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .resumen-conteos {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
